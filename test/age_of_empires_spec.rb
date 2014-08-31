@@ -154,7 +154,9 @@ describe 'Age of Empires' do
   it 'cuando atila es atacado el mago lo teletransporta' do
     mago = Mago.new
     atila = Guerrero.new
-    atila.agregar( lambda {|unidad | mago.teletransportar(unidad)})
+    atila.agregar( lambda {|unidad |
+      mago.teletransportar(unidad)
+    })
     conan = Guerrero.new
 
     conan.ataca_a(atila)
@@ -162,9 +164,13 @@ describe 'Age of Empires' do
     mago.teletransportando.include?(atila).should == true
   end
 
-=begin
   it 'cuando atila es atacado pasan cosas locas' do
     atila = Guerrero.new
+
+    atila.singleton_class.send(:define_method,
+      :comerse_un_pollo, lambda {
+      self.energia += 20
+    })
 
     atila.agregar(lambda {|unidad|
         unidad.descansar
@@ -174,32 +180,6 @@ describe 'Age of Empires' do
     conan.ataca_a(atila)
     atila.energia.should == (100 - 20 + 10 + 20)
   end
-=end
-
-  it 'bloques locos' do
-    a = 5
-    bloque = lambda {
-      a
-    }
-
-    bloque.call().should == 5
-
-    a = 6
-    bloque.call().should == 6
-  end
-
-
-  it 'bloques locos2' do
-    a = 5
-    bloque = lambda {
-      a = 3
-    }
-
-    a.should == 5
-    bloque.call()
-    a.should == 3
-  end
-
 
 end
 
